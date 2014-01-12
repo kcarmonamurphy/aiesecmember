@@ -1,0 +1,14 @@
+%form{:action => "#{action}", :method => "post"}
+	#container
+		%h1 AIESEC McMaster Member Application
+		%h3 Detailed Response
+		#leftcol
+			.field
+				%label{:for => "birthdate"} Birthdate
+				%input{:type => "text", :name => "birthdate", :value => "#{c.birthdate}", :tabindex => 5}
+		#rightcol
+			.field
+				%label{:for => "stud_number"} Student Number
+				%input{:type => "text", :name => "stud_number", :value => "#{c.stud_number}", :tabindex => 6}
+		#clearboth
+	= haml :footer, :layout => false, :locals => {:pagenum => "#{pagenum}"}

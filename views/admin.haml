@@ -1,0 +1,22 @@
+%h1 List of all 
+%table
+	%tr
+		%th
+		%th Full Name
+		%th Mac Email
+		%th Program & Level
+		%th Student Number
+		%th Birth Date
+		%th Permanent Address
+		%th Phone Number
+
+	- candidates.each do|c|
+		%tr
+			%td= c.id
+			%td= c.full_name
+			%td= c.mac_email
+			%td= c.prog_level
+			%td= c.stud_number
+			%td= c.birthdate
+			%td= c.perm_address
+			%td= c.phone_num

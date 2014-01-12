@@ -1,0 +1,109 @@
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+#frame {
+    border: 1px solid black;
+    width: 800px;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#inner {
+    width:auto;
+    margin:15px;
+}
+
+#container {
+    display:block;
+    height:100%;
+    margin:20px;
+}
+
+#leftcol{
+    display:inline-block;
+    float:left;
+    width:50%;
+}
+
+#rightcol{
+    display:inline-block;
+    float:right;
+    width:50%;
+}
+
+#clearboth{
+    clear:both;
+}
+
+.banner {
+    width:inherit;
+}
+
+.pagination, .submit {
+    display:table-cell;
+    vertical-align: middle;
+}
+
+.separator{
+    display:table-cell;
+    width:75%;
+}
+
+input[type="submit"]{
+    padding:5px 10px;
+}
+
+input[type="submit"]:active{
+    background-color:gray;
+}
+
+input {
+    background:white;
+    border:black solid 1px;
+    padding:0 3px;
+}
+
+.error {
+    color:red;
+    font-style: italic;
+    font-size:0.8em;
+}
+
+.highlight {
+    border:red solid 1px;
+}
+
+.italic {
+    font-style: italic;
+}
+
+hr {
+    /*height:1px;*/
+    display:block;
+    width:100%;
+}
+
+h1 {
+    font-size:1.5em;
+    font-weight:bold;
+}
+
+h3 {
+    font-size: 1.2em;
+    font-weight:bold;
+}
+
+p, h1, h2, h3, h4, h5, h6, .field {
+    margin-bottom:15px;
+}
+
+footer {
+    border-top:1px solid gray;
+    width:100%;
+    display:table;
+    height:60px;
+    text-align:center;
+}
