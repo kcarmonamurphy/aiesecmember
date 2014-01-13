@@ -3,20 +3,20 @@
 		%h1 AIESEC McMaster Member Application
 		%p Thank you for your interest in applying to become a member of AIESEC McMaster! Please complete the following form, and if we like what we see, you will be contacted for an interview. The form has multiple parts; be sure to click submit on each page.
 		%h3 Contact Information
-		
+
 		#leftcol
-			- fields.even_values.each do |field|
+			- fields.to_a.even_values.each_with_index do |(field, label), index|
 				.field
-					%label{:for => "#{field}"} #{humanize(field.to_s)}:
-					%input{:type => "text", :name => "#{field}", :class => "#{flash[field] ? 'highlight' : ''}", :value => session[field], :tabindex => 1}
+					%label{:for => "#{field}"} #{label}:
+					%input{:type => "text", :name => "#{field}", :class => "#{flash[field] ? 'highlight' : ''}", :value => session[field], :tabindex => index*2+2}
 					- if flash[field]
 						%p.error= flash[field]
 			
 		#rightcol
-			- fields.odd_values.each do |field|
+			- fields.to_a.odd_values.each_with_index do |(field, label), index|
 				.field
-					%label{:for => "#{field}"} #{humanize(field.to_s)}:
-					%input{:type => "text", :name => "#{field}", :class => "#{flash[field] ? 'highlight' : ''}", :value => session[field], :tabindex => 1}
+					%label{:for => "#{field}"} #{label}:
+					%input{:type => "text", :name => "#{field}", :class => "#{flash[field] ? 'highlight' : ''}", :value => session[field], :tabindex => index*2+3}
 					- if flash[field]
 						%p.error= flash[field]
 			.field

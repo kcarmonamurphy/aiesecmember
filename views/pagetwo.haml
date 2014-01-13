@@ -2,13 +2,13 @@
 	#container
 		%h1 AIESEC McMaster Member Application
 		%h3 Detailed Response
-		#leftcol
+
+		- fields.to_a.each_with_index do |(field, label), index|
 			.field
-				%label{:for => "birthdate"} Birthdate
-				%input{:type => "text", :name => "birthdate", :value => "#{c.birthdate}", :tabindex => 5}
-		#rightcol
-			.field
-				%label{:for => "stud_number"} Student Number
-				%input{:type => "text", :name => "stud_number", :value => "#{c.stud_number}", :tabindex => 6}
-		#clearboth
+				%label{:for => "#{field}"} #{label}:
+				%br
+				%textarea{:type => "text", :rows => 4, :name => "#{field}", :class => "#{flash[field] ? 'highlight' : ''}", :value => c[field], :tabindex => index+1}
+				- if flash[field]
+					%p.error= flash[field]
+
 	= haml :footer, :layout => false, :locals => {:pagenum => "#{pagenum}"}

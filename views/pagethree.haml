@@ -2,13 +2,12 @@
 	#container
 		%h1 AIESEC McMaster Member Application
 		%h3 Availability
-		#leftcol
+		
+		- fields.to_a.each_with_index do |(field, label), index|
 			.field
-				%label{:for => "phone_num"} Phone Number:
-				%input{:type => "text", :name => "phone_num", :value => "#{c.phone_num}", :tabindex => 5}
-		#rightcol
-			.field
-				%label{:for => "perm_address"} Permanent Address:
-				%input{:type => "text", :name => "perm_address", :value => "#{c.perm_address}", :tabindex => 6}
-		#clearboth
+				%label{:for => "#{field}"} #{label}:
+				%input{:type => "textarea", :name => "#{field}", :class => "#{flash[field] ? 'highlight' : ''}", :value => c[field], :tabindex => index+1}
+				- if flash[field]
+					%p.error= flash[field]
+					
 	= haml :footer, :layout => false, :locals => {:pagenum => "#{pagenum}"}

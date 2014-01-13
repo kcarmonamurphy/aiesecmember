@@ -2,6 +2,8 @@ require 'sinatra/base'
 require 'securerandom'
 require "sinatra/reloader" if development?
 
+
+
 module Token
 	def generate_token(column, length = 16)
 		begin
@@ -14,14 +16,18 @@ end
 module Property
 	def model_properties(model, start_property, stop_property)
 		begin
-			array = Array.new
+			sym_a = Array.new
+			label_a = Array.new
 			model.properties.each do |p|
-				field = p.instance_variable_name.slice(1..-1).to_sym
-				array.push(field)
+				sym = p.instance_variable_name.slice(1..-1).to_sym
+				label = p.options[:field_title]
+				sym_a.push(sym)
+				label_a.push(label)
 			end
-			start = array.index(start_property)
-			stop = array.index(stop_property)
-			return array.slice(start,stop)
+			start = sym_a.index(start_property)
+			stop = sym_a.index(stop_property)
+			h = Hash[sym_a[start..stop].zip label_a[start..stop]]
+			return h
 		end
 	end
 end
