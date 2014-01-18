@@ -11,64 +11,97 @@ require "sinatra/reloader" if development?
 set :server, 'webrick'
 
 DataMapper::setup(:default, ENV['DATABASE_URL'] || "sqlite3://#{Dir.pwd}/db.db")
-DataMapper::Model.raise_on_save_failure = false
+DataMapper::Model.raise_on_save_failure = true
 DataMapper::Property.accept_options(:field_title)
 
 class Candidate
 	include DataMapper::Resource
 
 	property :id, Serial, :required => true
-	property :full_name, String, :required => true, :field_title => "Full Name",
+
+	property :full_name, String, :field_title => "Full Name",
 	:messages => {
 		:presence 	=> "Please provide your full name"
 	}
-	property :program_and_level, String, :required => true, :field_title => "Program & Level",
+	#validates_presence_of :full_name, :when => [ :first_page ]
+
+	property :prog_level, String, :field_title => "Program & Level",
     :messages => {
       	:presence 	 => "Please provide your program and level",
       	:format   	 => "Invalid email address"
     }
-	property :birthdate, String, :required => true, :field_title => "Birthdate",
+    #validates_presence_of :prog_level, :when => [ :first_page ]
+
+	property :birthdate, String, :field_title => "Birthdate",
 	:messages => {
 		:presence 	=> "Please provide your birthdate"
 	}
-	property :student_number, String, :required => true, :field_title => "Student Number", :length => 7,
+	#validates_presence_of :birthdate, :when => [ :first_page ]
+
+	property :stud_num, String, :field_title => "Student Number", :length => 7,
 	:messages => {
 		:presence 	=> "Please provide your student number",
 		:length		=> "Must be 7 digits"
 	}
-	property :mac_email, String, :required => true, :field_title => "McMaster Email", :format => :email_address, :unique => true,
+	#validates_presence_of :stud_num, :when => [ :first_page ]
+
+	property :mac_email, String, :field_title => "McMaster Email", :format => :email_address,
 	:messages => {
 		:presence 	 => "Please provide your mac email address",
-      	:format   	 => "Invalid email address",
-      	:is_unique	 => "Email already used"
+      	:format   	 => "Invalid email address"
 	}
-	property :alternate_email, String, :required => true, :field_title => "Alternative Email", :format => :email_address, :unique => true,
+	#validates_presence_of :mac_email, :when => [ :first_page ]
+
+	property :alt_email, String, :field_title => "Alternative Email", :format => :email_address,
 	:messages => {
 		:presence 	 => "Please provide an alternative email address",
-      	:format   	 => "Invalid email address",
-      	:is_unique	 => "Email already used"
+      	:format   	 => "Invalid email address"
 	}
-	property :phone_number, String, :required => true, :field_title => "Phone Number",
+	#validates_presence_of :alt_email, :when => [ :first_page ]
+
+	property :phone_num, String, :field_title => "Phone Number",
 	:messages => {
-		:presence 	=> "Please provide your phone number",
+		:presence 	=> "Please provide your phone number"
 	}
-	property :permanent_address, String, :required => true, :field_title => "Permanent Address",
+	#validates_presence_of :phone_num, :when => [ :first_page ]
+
+	property :perm_address, String, :field_title => "Permanent Address",
 	:messages => {
 		:presence 	=> "Please provide your permanent address"
 	}
-	property :current_address, String, :required => true, :field_title => "Current Address",
+	#validates_presence_of :perm_address, :when => [ :first_page ]
+
+	property :curr_address, String, :field_title => "Current Address",
 	:messages => {
 		:presence 	=> "Please provide your current address"
 	}
-	property :gender, String, :required => true, :field_title => "Gender"
+	#validates_presence_of :curr_address, :when => [ :first_page ]
 
-	property :question1, String,  :field_title => "Which position(s) interest you the most. (Please refer to our Job Catalogue for details)"
-	property :question2, String,  :field_title => "List your top 3 relevant professional experiences in chronological order. Include dates, employer, and what experiences you gained."
-	property :question3, String,  :field_title => "What is your main goal and motivation to become part of AIESEC?"
-	property :question4, String,  :field_title => "What skills would you like to develop by being involved with AIESEC?"
-	property :question5, String,  :field_title => "What does leadership mean to you? Name 3 key skills or traits you possess. (eg. Strategic thinking, patience, methodical)"
-	property :question6, String,  :field_title => "What type of person do you enjoy working with?"
-	property :question7, String,  :field_title => "Describe a situation in which you had a lot of things to do at the same time and how you managed fulfill all responsibilities on time."
+	property :gender, String, :field_title => "Gender"
+	#validates_presence_of :gender, :when => [ :first_page ]
+
+
+
+	property :q1, String, :field_title => "Which position(s) interest you the most. (Please refer to our Job Catalogue for details)"
+	#validates_presence_of :q1, :when => [ :second_page ]
+
+	property :q2, String, :field_title => "List your top 3 relevant professional experiences in chronological order. Include dates, employer, and what experiences you gained."
+	#validates_presence_of :q2, :when => [ :second_page ]
+
+	property :q3, String, :field_title => "What is your main goal and motivation to become part of AIESEC?"
+	#validates_presence_of :q3, :when => [ :second_page ]
+
+	property :q4, String, :field_title => "What skills would you like to develop by being involved with AIESEC?"
+	#validates_presence_of :q4, :when => [ :second_page ]
+
+	property :q5, String, :field_title => "What does leadership mean to you? Name 3 key skills or traits you possess. (eg. Strategic thinking, patience, methodical)"
+	#validates_presence_of :q5, :when => [ :second_page ]
+
+	property :q6, String, :field_title => "What type of person do you enjoy working with?"
+	#validates_presence_of :q6, :when => [ :second_page ]
+
+	property :q7, String, :field_title => "Describe a situation in which you had a lot of things to do at the same time and how you managed fulfill all responsibilities on time."
+	#validates_presence_of :q7, :when => [ :second_page ]
 
 	property :newfield, String, :field_title => "new field"
 
@@ -100,7 +133,7 @@ class Platform < Sinatra::Base
   		haml :index, :locals => {
 	     	:action => "/create",
 	     	:pagenum => "1",
-	     	:fields => model_properties(Candidate, :full_name, :current_address)
+	     	:fields => model_properties(Candidate, :full_name, :curr_address)
    		}
 	end
 
@@ -109,7 +142,7 @@ class Platform < Sinatra::Base
 		c = Candidate.new
 
 		#save field parameters to record and session
-		model_properties(Candidate, :full_name, :current_address).each do |field, name|
+		model_properties(Candidate, :full_name, :curr_address).each do |field, name|
 			c[field] = session[field] = params[field]
 		end
 		c[:gender] = session[:gender] = params[:gender]
@@ -138,20 +171,35 @@ class Platform < Sinatra::Base
 			:c => c,
 			:action => "/#{c.hex}/pagetwo/process",
 			:pagenum => "2",
-			:fields => model_properties(Candidate, :question1, :question7)
+			:fields => model_properties(Candidate, :q1, :q7)
 	 	}
 	end
 
 	post '/:ca/pagetwo/process' do |ca|
 		c = Candidate.first(:hex => ca)
 
-		model_properties(Candidate, :question1, :question7).each do |field|
-			c[field] = params[field]
+		model_properties(Candidate, :q1, :q7).each do |field|
+			c[field] = session[field] = params[field]
+			puts session[field].inspect
 		end
 
 		c.save
 
 		redirect "/#{c.hex}/pagethree"
+
+		# #save record
+  #  		if c.save(:first_page)
+  #    		redirect "/#{c.hex}/pagethree"
+  #  		else
+  #  			#error on save, show error messages
+  #  			c.attributes.each do |a|
+  #  				field = a.first
+  #  				puts field.inspect
+		# 		flash[field] = c.errors.on(field) ? c.errors.on(field).first : nil
+		# 	end
+  #    		redirect "/#{c.hex}/pagetwo"
+  # 		end
+
 	end
 
 	get '/:ca/pagethree' do |ca|
@@ -185,7 +233,18 @@ class Platform < Sinatra::Base
 	end
 
 	get '/admin' do
-		haml :admin, :locals => { :candidates => Candidate.all}
+		haml :admin, :locals => { 
+			:candidates => Candidate.all
+		}
+	end
+
+	get '/admin/:id' do |id|
+		c = Candidate.get(id)
+		haml :candidate, :layout => false, :locals => { 
+			:c => c,
+			:fields_info => model_properties(Candidate, :prog_level, :gender),
+			:fields_questions => model_properties(Candidate, :q1, :q7)
+		}
 	end
 
 	not_found do  

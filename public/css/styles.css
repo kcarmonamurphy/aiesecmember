@@ -42,6 +42,38 @@ html, body {
     width:inherit;
 }
 
+table.list th {
+   padding:4px;
+   background:yellow;
+   text-align:center;
+}
+
+table.list td {
+    text-align:center;
+    padding:4px;
+}
+
+table.list tr:nth-child(odd) {
+    background:lightgray;
+}
+
+table.candidate {
+    margin-bottom:15px;
+}
+
+table.candidate td {
+    padding-right:10px;
+    padding-bottom:5px;
+}
+
+.bold {
+    font-weight:bold;
+}
+
+.italic {
+    font-style:italic;
+}
+
 .pagination, .submit {
     display:table-cell;
     vertical-align: middle;
@@ -90,6 +122,7 @@ hr {
     /*height:1px;*/
     display:block;
     width:100%;
+    margin-bottom:15px;
 }
 
 h1 {
@@ -99,6 +132,10 @@ h1 {
 
 h3 {
     font-size: 1.2em;
+    font-weight:bold;
+}
+
+h4 {
     font-weight:bold;
 }
 

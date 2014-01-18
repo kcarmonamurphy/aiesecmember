@@ -1,0 +1,28 @@
+!!!  
+%html  
+	%head  
+		%title= c[:full_name]
+		%link(rel="stylesheet" href="/css/reset.css")  
+		%link(rel="stylesheet" href="/css/styles.css")  
+	%body
+		#container
+			%h1= c[:full_name]
+
+			%hr
+
+			%h3.italic General Info
+
+			%table.candidate
+				- fields_info.each do |field, label|
+					%tr
+						%td.bold= label
+						%td= c[field]
+
+
+			%h3.italic Long Answer Questions
+
+			- fields_questions.each do |field, label|
+				%h4= label
+				%p= c[field]
+
+			%p= c[:q1]

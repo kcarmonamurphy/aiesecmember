@@ -1,22 +1,21 @@
-%h1 List of all 
-%table
-	%tr
-		%th
-		%th Full Name
-		%th Mac Email
-		%th Program & Level
-		%th Student Number
-		%th Birth Date
-		%th Permanent Address
-		%th Phone Number
+#container
+	%h1 AIESEC McMaster Member Application
+	%h3 Admin
+	%table.list
+		%tr.bold
+			%th
+			%th Id
+			%th Full Name
+			%th Mac Email
+			%th Student Number
+			%th Created At
 
-	- candidates.each do|c|
-		%tr
-			%td= c.id
-			%td= c.full_name
-			%td= c.mac_email
-			%td= c.prog_level
-			%td= c.stud_number
-			%td= c.birthdate
-			%td= c.perm_address
-			%td= c.phone_num
+		- candidates.each do|c|
+			%tr
+				%td
+					%a{:href => "/admin/#{c.id}" } View
+				%td= c.id
+				%td= c.full_name
+				%td= c.mac_email
+				%td= c.stud_num
+				%td= c.created_at

@@ -7,7 +7,7 @@
 			.field
 				%label{:for => "#{field}"} #{label}:
 				%br
-				%textarea{:type => "text", :rows => 4, :name => "#{field}", :class => "#{flash[field] ? 'highlight' : ''}", :value => c[field], :tabindex => index+1}
+				%input{:type => "text", :rows => 4, :name => "#{field}", :class => "#{flash[field] ? 'highlight' : ''}", :value => session[field], :tabindex => index+1} #{session[field]}
 				- if flash[field]
 					%p.error= flash[field]
 
