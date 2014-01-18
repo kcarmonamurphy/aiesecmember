@@ -9,5 +9,16 @@
 				%input{:type => "textarea", :name => "#{field}", :class => "#{flash[field] ? 'highlight' : ''}", :value => c[field], :tabindex => index+1}
 				- if flash[field]
 					%p.error= flash[field]
+
+		.grid hello
 					
 	= haml :footer, :layout => false, :locals => {:pagenum => "#{pagenum}"}
+
+:javascript
+	$( document ).ready(function() {
+		for(var i = 0; i < 5; i++) {
+			for(var j = 0; j < 5; j++) {
+				$("div.grid").append("<div class='square' style='left:" + i*20 + "px; top:" + j*20 + "px;'>&nbsp;</div>");
+			}
+		}
+	});

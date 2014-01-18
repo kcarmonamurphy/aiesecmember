@@ -50,8 +50,6 @@ GEM
       uuidtools (~> 2.1)
     dm-validations (1.2.0)
       dm-core (~> 1.2.0)
-    do_sqlite3 (0.10.13)
-      data_objects (= 0.10.13)
     do_sqlite3 (0.10.13-x86-mingw32)
       data_objects (= 0.10.13)
     fastercsv (1.5.5)

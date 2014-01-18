@@ -34,14 +34,15 @@ class Candidate
 
 	property :mac_email, String, :field_title => "McMaster Email", :format => :email_address
 	validates_presence_of :mac_email, :message => "Please provide your mac email address", :when => [ :first_page ]
-	validates_format_of :mac_email, :as => :email_address, :message => "Invalid format", :when => [ :first_page ]
+	validates_format_of :mac_email, :as => :email_address, :message => "Invalid email format", :when => [ :first_page ]
 
 	property :alt_email, String, :field_title => "Alternative Email", :format => :email_address
 	validates_presence_of :alt_email, :message => "Please provide an alternative email address", :when => [ :first_page ]
-	validates_format_of :alt_email, :as => :email_address, :message => "Invalid format", :when => [ :first_page ]
+	validates_format_of :alt_email, :as => :email_address, :message => "Invalid email format", :when => [ :first_page ]
 
 	property :phone_num, String, :field_title => "Phone Number"
 	validates_presence_of :phone_num, :message => "Please provide your phone number", :when => [ :first_page ]
+	validates_format_of :phone_num, :with => /((\(\d{3}\) ?)|(\d{3}-))?\d{3}-\d{4}/, :message => "Phone number must follow this format: 123-456-7890", :when => [ :first_page ]
 
 	property :perm_address, String, :field_title => "Permanent Address"
 	validates_presence_of :perm_address, :message => "Please provide your permanent address", :when => [ :first_page ]
@@ -180,19 +181,26 @@ class Platform < Sinatra::Base
 		c = Candidate.first(:hex => ca)
 
 		model_properties(Candidate, :newfield, :newfield).each do |field, name|
-			c[field] = params[field]
+			c[field] = session[field] = params[field]
 		end
 
-		c.save
-
-		redirect "/#{c.hex}/complete"
+		#save record
+   		if c.save(:second_page)
+     		redirect "/#{c.hex}/complete"
+   		else
+   			#error on save, show error messages
+   			c.attributes.each do |a|
+   				field = a.first
+				flash[field] = c.errors.on(field) ? c.errors.on(field).first : nil
+			end
+     		redirect "/#{c.hex}/pagethree"
+  		end
 	end
 
 	get '/:ca/complete' do |ca|
 		c = Candidate.first(:hex => ca)
 		haml :complete, :locals => {
-		    :c => c,
-			:action => "/admin"
+		    :c => c
 	   	}
 	end
 
