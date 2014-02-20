@@ -1,7 +1,7 @@
 require 'sinatra'
 require 'haml'
 require 'data_mapper'
-require 'dm-sqlite-adapter'
+require 'dm-postgres-adapter'
 require 'securerandom'
 require 'rack-flash'  
 require 'sinatra/redirect_with_flash'  
@@ -11,7 +11,14 @@ require 'sinatra/assetpack'
 
 set :server, 'webrick'
 
-DataMapper::setup(:default, ENV['DATABASE_URL'] || "sqlite3://#{Dir.pwd}/db.db")
+configure :development do
+	DataMapper::setup(:default, ENV['DATABASE_URL'] || "postgres://localhost/aiesecmember")
+end
+
+configure :production do
+	DataMapper::setup(:default, ENV['DATABASE_URL'] || "postgres://anvcoxtcxvnqdf:HiCmxBNEp5qKnk8vqgDzMoaopz@ec2-54-197-251-18.compute-1.amazonaws.com:5432/d79ngjcqh34gvs")
+end
+
 DataMapper::Model.raise_on_save_failure = false
 DataMapper::Property.accept_options(:field_title)
 
@@ -115,7 +122,7 @@ class Platform < Sinatra::Base
   	#-------SETUP-----------
   	enable :sessions
   	use Rack::Flash, :sweep => true  
-  	set :environment, :production
+  	#set :environment, :production
   	register Sinatra::AssetPack
   	
 
