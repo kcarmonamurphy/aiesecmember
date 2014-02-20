@@ -13,6 +13,8 @@ set :server, 'webrick'
 
 configure :development do
 	DataMapper::setup(:default, ENV['DATABASE_URL'] || "postgres://localhost/aiesecmember")
+    register Sinatra::Reloader
+    also_reload './helpers/apphelper.rb'
 end
 
 configure :production do
@@ -112,12 +114,6 @@ class Platform < Sinatra::Base
 	helpers Property
 	helpers Inflector
 	helpers Auth
-
-	#-------DEVELOPMENT-----------
-	configure :development do
-    	register Sinatra::Reloader
-    	also_reload './helpers/apphelper.rb'
-  	end
 
   	#-------SETUP-----------
   	enable :sessions
