@@ -18,7 +18,7 @@ configure :development do
 end
 
 configure :production do
-	DataMapper::setup(:default, ENV['DATABASE_URL'] || "postgres://anvcoxtcxvnqdf:HiCmxBNEp5qKnk8vqgDzMoaopz@ec2-54-197-251-18.compute-1.amazonaws.com:5432/d79ngjcqh34gvs")
+	DataMapper::setup(:default, ENV['DATABASE_URL'] || "postgres://path/to/db")
 end
 
 DataMapper::Model.raise_on_save_failure = false
