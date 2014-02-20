@@ -1,3 +1,5 @@
+#--------GEMS----------
+
 require 'sinatra'
 require 'haml'
 require 'data_mapper'
@@ -11,6 +13,8 @@ require 'sinatra/assetpack'
 
 set :server, 'webrick'
 
+#-------ENVIRONMENTS-----------
+
 configure :development do
 	DataMapper::setup(:default, ENV['DATABASE_URL'] || "postgres://localhost/aiesecmember")
     register Sinatra::Reloader
@@ -23,6 +27,8 @@ end
 
 DataMapper::Model.raise_on_save_failure = false
 DataMapper::Property.accept_options(:field_title)
+
+#---------MODEL-----------
 
 class Candidate
 	include DataMapper::Resource
@@ -107,7 +113,6 @@ class Platform < Sinatra::Base
 	set :token,'maketh1$longandh@rdtoremember'
 	set :password,'eddie'
 
-
 	#-------HELPERS-----------
 	helpers Token
 	helpers Sinatra::RedirectWithFlash
@@ -120,7 +125,6 @@ class Platform < Sinatra::Base
   	use Rack::Flash, :sweep => true  
   	#set :environment, :production
   	register Sinatra::AssetPack
-  	
 
   	#-------ASSETS-----------
 	assets do
@@ -140,6 +144,7 @@ class Platform < Sinatra::Base
 
 	end	
 
+	#-------ROUTES------------------------
 
   	get '/' do
   		haml :index, :locals => {
