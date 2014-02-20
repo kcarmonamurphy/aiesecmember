@@ -2,8 +2,6 @@ require 'sinatra/base'
 require 'securerandom'
 require "sinatra/reloader" if development?
 
-
-
 module Token
 	def generate_token(column, length = 16)
 		begin
@@ -38,6 +36,11 @@ module Inflector
 	end
 end
 
+module Auth
+  	def admin? ; request.cookies[settings.username] == settings.token ; end
+end
+
+
 class Array
 	def odd_values
 	  self.values_at(* self.each_index.select {|i| i.odd?})
@@ -46,6 +49,3 @@ class Array
 	  self.values_at(* self.each_index.select {|i| i.even?})
 	end
 end
-		
-  
-

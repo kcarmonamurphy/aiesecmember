@@ -13,9 +13,14 @@
 		- candidates.each do|c|
 			%tr
 				%td
-					%a{:href => "/admin/#{c.id}" } View
+					%a{:href => "/admin/#{c.id}"}
+						%img{:src => "/pictures/magnify.bmp", :class => "magnify"}
 				%td= c.id
 				%td= c.full_name
 				%td= c.mac_email
 				%td= c.stud_num
 				%td= c.created_at
+
+	%br
+	%a{:href => '/logout'}
+		%button Logout

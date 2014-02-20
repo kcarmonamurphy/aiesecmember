@@ -2,9 +2,8 @@
 %html  
 	%head  
 		%title AIESEC Registration
-		%link(rel="stylesheet" href="/css/reset.css")  
-		%link(rel="stylesheet" href="/css/styles.css")
-		%script{:src => "/js/jquery-1.10.2.js"}
+		!= css :application
+		!= js :application
 	%body   
 		#frame  
 			%img.banner{:src => "/pictures/banner_bw.png"}

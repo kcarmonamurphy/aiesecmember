@@ -10,7 +10,7 @@
 
 			%hr
 
-			%h3.italic General Info
+			%h3.italic.underline General Info
 
 			%table.candidate
 				- fields_info.each do |field, label|
@@ -19,11 +19,23 @@
 						%td= c[field]
 
 
-			%h3.italic Long Answer Questions
+			%h3.italic.underline Long Answer Questions
 
 			- fields_questions.each do |field, label|
 				%h4= label
 				%p= c[field]
 
-			%p= c[:q1]
-			%p= c[:newfield]
+			%h3.italic.underline Availability
+
+			- if fields_availability
+				- fields_availability.each do |field, label|
+					- if c[field]
+						%span= label
+						%br
+			- else
+				%span Not available. Schedule alternate appointment.
+
+			%br
+			%hr
+			- fields_created_at.each do |field, label|
+				%p.italic Created at #{c[field]}

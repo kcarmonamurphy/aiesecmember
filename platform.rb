@@ -7,6 +7,7 @@ require 'rack-flash'
 require 'sinatra/redirect_with_flash'  
 require './helpers/apphelper.rb'
 require "sinatra/reloader" if development?
+require 'sinatra/assetpack'
 
 set :server, 'webrick'
 
@@ -74,7 +75,14 @@ class Candidate
 	property :q7, String, :field_title => "Describe a situation in which you had a lot of things to do at the same time and how you managed fulfill all responsibilities on time."
 	validates_presence_of :q7, :when => [ :second_page ]
 
-	property :newfield, String, :field_title => "new field"
+	property :y2014m01d15, Boolean, :field_title => "Wednesday, January 15th 2014"
+	# validates_presence_of :y2014m01d15, :when => [ :third_page ]
+
+	property :y2014m01d16, Boolean, :field_title => "Thursday, January 16th 2014"
+	# validates_presence_of :y2014m01d16, :when => [ :third_page ]
+
+	property :y2014m01d17, Boolean, :field_title => "Friday, January 17th 2014"
+	# validates_presence_of :y2014m01d17, :when => [ :third_page ]
 
 	property :created_at, DateTime
 	property :hex, String, :unique => true
@@ -85,20 +93,50 @@ DataMapper.finalize.auto_migrate!
 
 class Platform < Sinatra::Base
 
-	#helpers
+	#-------AUTH------------
+	set :username, 'admin'
+	set :token,'maketh1$longandh@rdtoremember'
+	set :password,'eddie'
+
+
+	#-------HELPERS-----------
 	helpers Token
 	helpers Sinatra::RedirectWithFlash
 	helpers Property
 	helpers Inflector
+	helpers Auth
 
+	#-------DEVELOPMENT-----------
 	configure :development do
     	register Sinatra::Reloader
     	also_reload './helpers/apphelper.rb'
   	end
 
+  	#-------SETUP-----------
   	enable :sessions
   	use Rack::Flash, :sweep => true  
-  	#set :environment, :production
+  	set :environment, :production
+  	register Sinatra::AssetPack
+  	
+
+  	#-------ASSETS-----------
+	assets do
+
+  			# serve '/js', :from => 'public/js'
+		# js :application, [
+		# 	'/js/jquery-1.10.2.js',
+		# 	'/js/scheduler.js'
+		# 	# You can also do this: 'js/*.js'
+		# ]
+
+		serve '/css', :from => 'public/css'
+		css :application, [
+			'/css/reset.css',
+			'/css/styles.css'
+		]
+
+	end	
+
 
   	get '/' do
   		haml :index, :locals => {
@@ -173,19 +211,20 @@ class Platform < Sinatra::Base
 		    :c => c,
 			:action => "/#{c.hex}/pagethree/process",
 			:pagenum => "3",
-			:fields => model_properties(Candidate, :newfield, :newfield)
+			:fields => model_properties(Candidate, :y2014m01d15, :y2014m01d17)
 	   	}
+
 	end
 
 	post '/:ca/pagethree/process' do |ca|
 		c = Candidate.first(:hex => ca)
 
-		model_properties(Candidate, :newfield, :newfield).each do |field, name|
-			c[field] = session[field] = params[field]
+		model_properties(Candidate, :y2014m01d15, :y2014m01d17).each do |field, name|
+			c[field] = session[field] = params[field] == 'on' ? true : false
 		end
 
 		#save record
-   		if c.save(:second_page)
+   		if c.save
      		redirect "/#{c.hex}/complete"
    		else
    			#error on save, show error messages
@@ -204,18 +243,44 @@ class Platform < Sinatra::Base
 	   	}
 	end
 
-	get '/admin' do
+	get '/login/?' do
+		haml :login, :layout => false
+
+	end
+
+	post '/login' do
+		if params['username']==settings.username&&params['password']==settings.password
+      		response.set_cookie(settings.username,settings.token) 
+      		redirect '/admin'
+		else
+      		"Username or Password incorrect."
+    	end
+	end
+
+	get '/logout/?' do
+		response.set_cookie(settings.username, false)
+		"Logged out successfully."
+	end
+
+
+	get '/admin/?' do
+		if not admin? ; redirect '/login' ; end
+
 		haml :admin, :locals => { 
 			:candidates => Candidate.all
 		}
 	end
 
 	get '/admin/:id' do |id|
+		if not admin? ; redirect '/login' ; end
+
 		c = Candidate.get(id)
 		haml :candidate, :layout => false, :locals => { 
 			:c => c,
 			:fields_info => model_properties(Candidate, :prog_level, :gender),
-			:fields_questions => model_properties(Candidate, :q1, :q7)
+			:fields_questions => model_properties(Candidate, :q1, :q7),
+			:fields_availability => model_properties(Candidate, :y2014m01d15, :y2014m01d17),
+			:fields_created_at => model_properties(Candidate, :created_at, :created_at)
 		}
 	end
 
